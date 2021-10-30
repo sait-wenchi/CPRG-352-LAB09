@@ -30,7 +30,7 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+        getServletContext().getRequestDispatcher("/WEB-INF/user.jsp").forward(request,response);
     }
 
     /**

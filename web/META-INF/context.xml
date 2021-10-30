@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context path="/Lab7_ManageUser">
-<Resource name="jdbc/note”sub
-url="jdbc:mysql://localhost:3306/notesdb” 
-username="root"password="password"
-maxActive="100"
-maxIdle="30" 
-maxWait="10000"
-logAbandoned="true" 
-removeAbandoned="true" 
-removeAbandonedTimeout="60" 
-driverClassName=“com.mysql.jdbc.Driver”
-type="javax.sql.DataSource" 
-auth=“Container”/>
+<Resource
+        name="jdbc/userdb"
+        url="jdbc:mysql://localhost:3306/userdb" 
+        username="root"
+        password="password"
+        maxActive="100"
+        maxIdle="30"
+        maxWait="10000" 
+        logAbandoned="true"
+        removeAbandoned="true" 
+        removeAbandonedTimeout="60"
+        driverClassName="com.mysql.jdbc.Driver"
+        type="javax.sql.DataSource"
+        auth="Container"
+    />
 </Context>
 
