@@ -7,10 +7,18 @@ package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import models.Role;
+import models.User;
+import services.RoleService;
+import services.UserService;
 
 /**
  *
@@ -30,6 +38,41 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        //getServletContext().getRequestDispatcher("/WEB-INF/user.jsp").forward(request,response);
+        //Get: url getrequest, action=edit getrequest,action=delete getrequest , action=cancel getrequest
+        UserService us = new UserService();
+        RoleService rs = new RoleService();
+        HttpSession session = request.getSession();
+        try {
+            String operation = request.getParameter("action");
+            if( operation != null && operation.equals("edit"))
+            {
+                System.out.println("action:edit");
+                String email = request.getParameter("email");
+                String email_r = email.replaceAll(" ","+");
+                User edit_user = us.get(email_r);
+                request.setAttribute("edit_user",edit_user);
+                request.setAttribute("edit_enable","true");
+            }
+            else if( operation != null && operation.equals("delete"))
+            {
+                System.out.println("action: delete");
+                String email = request.getParameter("email");
+                String email_r = email.replaceAll(" ","+");
+                us.delete(email_r);
+            }
+            else if( operation != null && operation.equals("cancel"))
+            {
+                System.out.println("action: cancel");
+            }
+            List<User> users = us.getAll();
+            List<Role> roles = rs.getAll();
+            request.setAttribute("users", users);
+            request.setAttribute("roles",roles);
+        } catch (Exception ex) {
+            request.setAttribute("message", "error");
+        }
+        
         getServletContext().getRequestDispatcher("/WEB-INF/user.jsp").forward(request,response);
     }
 
@@ -44,7 +87,42 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+        //Post: action=save postrequest, action=saveedit postrequest
+        UserService us = new UserService();
+        RoleService rs = new RoleService();
+        HttpSession session = request.getSession();
+        try 
+        {
+            
+            String operation = request.getParameter("action");
+            if( operation != null && operation.equals("save"))
+            {
+                System.out.println("post: save");
+                us.insert(request.getParameter("email"),Integer.parseInt(request.getParameter("active")),
+                            request.getParameter("firstname"),request.getParameter("lastname"),
+                            request.getParameter("password"),Integer.parseInt(request.getParameter("role")));
+            }
+            else if( operation != null && operation.equals("saveedit"))
+            {
+                System.out.println("post: saveedit");
+                System.out.printf("%s %s %s %s %s %s",request.getParameter("email"),request.getParameter("active"),
+                        request.getParameter("firstname"),request.getParameter("lastname"),
+                        request.getParameter("password"),request.getParameter("role"));
+                us.update(request.getParameter("email"),Integer.parseInt(request.getParameter("active")),
+                            request.getParameter("firstname"),request.getParameter("lastname"),
+                            request.getParameter("password"),Integer.parseInt(request.getParameter("role")));
+            }
+            List<User> users = us.getAll();
+            List<Role> roles = rs.getAll();
+            request.setAttribute("users", users);
+            request.setAttribute("roles",roles);
+                
+        }catch (Exception ex) {
+            System.out.println("post went wrong");
+            request.setAttribute("message", "error");
+        }
+        getServletContext().getRequestDispatcher("/WEB-INF/user.jsp").forward(request,response);
+  
     }
 
 }
