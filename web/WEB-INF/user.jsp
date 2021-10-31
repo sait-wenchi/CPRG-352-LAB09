@@ -82,7 +82,7 @@
         <div class="block_1">
             <h2 style="text-align: center;">Edit</h2>
             <form action="users" method="post">
-                <input type="text" class="item" name="email" placeholder="Email" required value=${edit_user.email}>
+                <input type="text" class="item" name="email" placeholder="Email" required readonly value=${edit_user.email}>
                 <select class="item" name="active">
                     <option value="1" <c:if test = "${edit_user.active == 1}"> selected</c:if>>active</option>
                     <option value="0" <c:if test = "${edit_user.active == 0}"> selected</c:if>>inactive</option>
