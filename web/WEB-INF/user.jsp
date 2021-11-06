@@ -68,11 +68,11 @@
                     <c:forEach var="user" items="${users}">
                         <tr>
                             <td>${user.email}</td>
-                            <td><c:if test = "${user.active == 1}">active</c:if><c:if test = "${user.active == 0}">inactive</c:if></td>
-                            <td>${user.first_name}</td><td>${user.last_name}</td>
-                            <td>${roles[user.role-1].role_name}
-                            <td><a href="/Lab7_ManageUser/users?action=edit&email=${user.email}">&#x270E;</a></td>
-                            <td><a href="/Lab7_ManageUser/users?action=delete&email=${user.email}">&#10060;</a></td>
+                            <td><c:if test = "${user.active == true}">active</c:if><c:if test = "${user.active == false}">inactive</c:if></td>
+                            <td>${user.firstName}</td><td>${user.lastName}</td>
+                            <td>${user.role.roleName}
+                            <td><a href="/Lab9_ManageUser/users?action=edit&email=${user.email}">&#x270E;</a></td>
+                            <td><a href="/Lab9_ManageUser/users?action=delete&email=${user.email}">&#10060;</a></td>
                               
                         </tr>
                         </c:forEach>
@@ -84,16 +84,16 @@
             <form action="users" method="post">
                 <input type="text" class="item" name="email" placeholder="Email" required readonly value=${edit_user.email}>
                 <select class="item" name="active">
-                    <option value="1" <c:if test = "${edit_user.active == 1}"> selected</c:if>>active</option>
-                    <option value="0" <c:if test = "${edit_user.active == 0}"> selected</c:if>>inactive</option>
+                    <option value="1" <c:if test = "${edit_user.active == true}"> selected</c:if>>active</option>
+                    <option value="0" <c:if test = "${edit_user.active == false}"> selected</c:if>>inactive</option>
                 </select>
-                <input type="text" class="item" name="firstname" placeholder="First Name" required value=${edit_user.first_name}>
-                <input type="text" class="item" name="lastname" placeholder="Last Name" required value=${edit_user.last_name}>
+                <input type="text" class="item" name="firstname" placeholder="First Name" required value=${edit_user.firstName}>
+                <input type="text" class="item" name="lastname" placeholder="Last Name" required value=${edit_user.lastName}>
                 <input type="text" class="item" name="password" placeholder="Password" required  value=${edit_user.password}>
                 <select class="item" name="role" value="regular user">
-                    <option value="1" <c:if test = "${edit_user.role == 1}"> selected</c:if>>${roles[0].role_name}</option>
-                    <option value="2" <c:if test = "${edit_user.role == 2}"> selected</c:if>>${roles[1].role_name}</option>
-                    <option value="3" <c:if test = "${edit_user.role == 3}"> selected</c:if>>${roles[2].role_name}</option>
+                    <option value="1" <c:if test = "${edit_user.role.roleId == 1}"> selected</c:if>>${roles[0].roleName}</option>
+                    <option value="2" <c:if test = "${edit_user.role.roleId == 2}"> selected</c:if>>${roles[1].roleName}</option>
+                    <option value="3" <c:if test = "${edit_user.role.roleId == 3}"> selected</c:if>>${roles[2].roleName}</option>
                 </select>
                 <input type="hidden" name="action" value="saveedit">
                 <input type="submit" class="item" value="Edit" <c:if test = "${edit_enable == null}">disabled</c:if>>

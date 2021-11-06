@@ -61,6 +61,7 @@ public class UserServlet extends HttpServlet {
                 System.out.println("action: delete");
                 String email = request.getParameter("email");
                 String email_r = email.replaceAll(" ","+");
+                System.out.println(email_r);
                 us.delete(email_r);
             }
             else if( operation != null && operation.equals("cancel"))
@@ -103,7 +104,11 @@ public class UserServlet extends HttpServlet {
             {
                 // Action: save a new user
                 System.out.println("post: save");
-                us.insert(request.getParameter("email"),Integer.parseInt(request.getParameter("active")),
+                boolean isActive = true;
+                if (request.getParameter("active").equals("0")){
+                    isActive = false;
+                }
+                us.insert(request.getParameter("email"),isActive,
                             request.getParameter("firstname"),request.getParameter("lastname"),
                             request.getParameter("password"),Integer.parseInt(request.getParameter("role")));
             }
@@ -111,10 +116,14 @@ public class UserServlet extends HttpServlet {
             {
                 // Action: save a edited user
                 System.out.println("post: saveedit");
-                System.out.printf("%s %s %s %s %s %s",request.getParameter("email"),request.getParameter("active"),
+                boolean isActive = true;
+                if (request.getParameter("active").equals("0")){
+                    isActive = false;
+                }
+                System.out.printf("%s %s %s %s %s",request.getParameter("active"),
                         request.getParameter("firstname"),request.getParameter("lastname"),
                         request.getParameter("password"),request.getParameter("role"));
-                us.update(request.getParameter("email"),Integer.parseInt(request.getParameter("active")),
+                us.update(request.getParameter("email"),isActive,
                             request.getParameter("firstname"),request.getParameter("lastname"),
                             request.getParameter("password"),Integer.parseInt(request.getParameter("role")));
             }
@@ -126,6 +135,7 @@ public class UserServlet extends HttpServlet {
                 
         }catch (Exception ex) {
             System.out.println("post went wrong");
+            System.out.println(ex);
             request.setAttribute("message", "error");
         }
         getServletContext().getRequestDispatcher("/WEB-INF/user.jsp").forward(request,response);
